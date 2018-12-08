@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.Login">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_name"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="Full Name"
+        android:maxLines="1"
+        android:inputType="textAutoComplete"
+        android:singleLine="true"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_alamat"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="Alamat"
+        android:inputType="textAutoComplete"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_no_tlp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="No Handphone"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:inputType="number"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <Spinner
+        android:id="@+id/spin_kelamin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:spinnerMode="dialog" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_username"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="Username"
+        android:inputType="textAutoComplete"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_pass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/regis_confir_pass"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundlayout"
+        android:gravity="center"
+        android:hint="Confirm Password"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:inputType="textPassword"
+        android:textColorHighlight="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rg_user_admin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Admin" />
+
+        <RadioButton
+            android:id="@+id/rg_user_biasa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="User Biasa" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/backgroundbutton"
+        android:text="Sign Up"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="4dp"
+            android:gravity="end"
+            android:text="Already have an account?"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp"
+            android:gravity="end"
+            android:text="Log in."
+            android:textColor="@color/colorPrimary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Go Food</string>
+    <string name="action_settings">Settings</string>
+    <string name="data_food">Data Food</string>
+    <string name="loading">Loading . . .</string>
+    <string name="confir">Confirmation</string>
+    <string name="sure">Are You Sure for?</string>
+</resources>

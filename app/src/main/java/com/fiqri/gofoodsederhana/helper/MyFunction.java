@@ -31,11 +31,6 @@ public class MyFunction extends AppCompatActivity {
         c = MyFunction.this;
     }
 
-    /*  public void myanimation(EditText edtanimasi){
-        animation= AnimationUtils.loadAnimation(c, R.anim.animasigetar);
-        edtanimasi.setAnimation(animation);
-    }*/
-
     public void intent(Class destination) {
         startActivity(new Intent(c, destination));
     }

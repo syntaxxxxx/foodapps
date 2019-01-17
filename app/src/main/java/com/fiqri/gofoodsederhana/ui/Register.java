@@ -1,8 +1,10 @@
 package com.fiqri.gofoodsederhana.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,10 +16,18 @@ import android.widget.TextView;
 import com.fiqri.gofoodsederhana.R;
 import com.fiqri.gofoodsederhana.helper.MyFunction;
 import com.fiqri.gofoodsederhana.helper.SessionManager;
+import com.fiqri.gofoodsederhana.model.ResponseRegister;
+import com.fiqri.gofoodsederhana.model.User;
+import com.fiqri.gofoodsederhana.network.ConfigRetrofit;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Register extends MyFunction {
 
@@ -89,10 +99,88 @@ public class Register extends MyFunction {
                 levelUser = "User Biasa";
                 break;
             case R.id.sign_up:
+                validasiInputan();
                 break;
             case R.id.login:
                 intent(Login.class);
                 break;
         }
+    }
+
+    private void validasiInputan() {
+
+        // tampung dalam variable dan ambil inputan di field nya
+        name = regisName.getText().toString().trim();
+        alamat = regisAlamat.getText().toString().trim();
+        noHp = regisNoTlp.getText().toString().trim();
+        username = regisUsername.getText().toString().trim();
+        password = regisPass.getText().toString().trim();
+        conPassword = regisConfirPass.getText().toString().trim();
+
+        if (TextUtils.isEmpty(name)) {
+            regisName.requestFocus();
+            regisName.setError("nama tidak boleh kosong");
+
+        } else if (TextUtils.isEmpty(alamat)) {
+            regisAlamat.requestFocus();
+            regisAlamat.setError("alamat tidak boleh kosong");
+
+        } else if (TextUtils.isEmpty(noHp)) {
+            regisNoTlp.requestFocus();
+            regisNoTlp.setError("no hp tidak boleh kosong");
+
+        } else if (TextUtils.isEmpty(username)) {
+            regisUsername.requestFocus();
+            regisUsername.setError("username tidak boleh kosong");
+
+        } else if (TextUtils.isEmpty(password)) {
+            regisPass.requestFocus();
+            regisPass.setError("password tidak boleh kosong");
+
+        } else if (password.length() < 6) {
+            regisPass.setError("password minimal 6 karakter");
+
+        } else if (TextUtils.isEmpty(conPassword)) {
+            regisConfirPass.requestFocus();
+            regisConfirPass.setError("password confirm tidak boleh kosong");
+
+        } else if (!password.equals(conPassword)) {
+            regisConfirPass.requestFocus();
+            regisConfirPass.setError("password tidak sama");
+
+        } else {
+            sendRequestRegister();
+        }
+    }
+
+    private void sendRequestRegister() {
+        ConfigRetrofit.getInstance().register(
+                name,
+                alamat,
+                jenKel,
+                noHp,
+                username,
+                levelUser,
+                password
+        ).enqueue(new Callback<ResponseRegister>() {
+            @Override
+            public void onResponse(Call<ResponseRegister> call, Response<ResponseRegister> response) {
+
+                if (response.isSuccessful()) {
+                    String result = response.body().getResult();
+                    String msg = response.body().getMsg();
+
+                    if (result.equals("1")){
+                        intent(Login.class);
+                        shortToast(msg);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseRegister> call, Throwable t) {
+                longToast(t.getMessage());
+            }
+        });
     }
 }

@@ -11,16 +11,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.fiqri.gofoodsederhana.helper.SessionManager;
+import com.fiqri.gofoodsederhana.model.DataKategoriItem;
+import com.fiqri.gofoodsederhana.model.ResponseKategoriMakanan;
+import com.fiqri.gofoodsederhana.network.ConfigRetrofit;
 import com.fiqri.gofoodsederhana.ui.adapter.FoodAdapter;
 import com.squareup.picasso.Target;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FoodUtama extends SessionManager implements SwipeRefreshLayout.OnRefreshListener, FoodAdapter.onItemClick {
 
@@ -41,6 +51,8 @@ public class FoodUtama extends SessionManager implements SwipeRefreshLayout.OnRe
     Uri filepath;
     Bitmap bitmap;
 
+    List<DataKategoriItem> dataKategori;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +60,43 @@ public class FoodUtama extends SessionManager implements SwipeRefreshLayout.OnRe
         ButterKnife.bind(this);
 
         setRequestPermission();
+        getDataKategoriMakanan();
         insertFoodData();
     }
 
     private void setRequestPermission() {
+    }
+
+    private void getDataKategoriMakanan() {
+        ConfigRetrofit.getInstance().getKategoriMakanan().enqueue(new Callback<ResponseKategoriMakanan>() {
+            @Override
+            public void onResponse(Call<ResponseKategoriMakanan> call, Response<ResponseKategoriMakanan> response) {
+                dataKategori = response.body().getDataKategori();
+                String[] itemid = new String[dataKategori.size()];
+                String[] itemnama = new String[dataKategori.size()];
+                for (int i = 0; i < dataKategori.size(); i++) {
+                    itemid[i] = dataKategori.get(i).getIdKategori();
+                    itemnama[i] = dataKategori.get(i).getNamaKategori();
+                }
+                ArrayAdapter adapter = new ArrayAdapter(FoodUtama.this, android.R.layout.simple_spinner_dropdown_item, itemnama);
+                spinKategoriUtama.setAdapter(adapter);
+                spinKategoriUtama.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        kategori = parent.getItemAtPosition(position).toString();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<ResponseKategoriMakanan> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

@@ -106,6 +106,8 @@ public class Login extends SessionManager {
                     String idUser = response.body().getUser().getIdUser();
 
                     if (result.equals("1")){
+                        // simpen id login ke session
+                        // gak perlu login 2 kali
                         sessionManager.createSession(userName);
                         sessionManager.setIdUser(idUser);
                         intent(FoodUtama.class);

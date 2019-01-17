@@ -1,10 +1,12 @@
 package com.fiqri.gofoodsederhana.network;
 
+import com.fiqri.gofoodsederhana.model.ResponseKategoriMakanan;
 import com.fiqri.gofoodsederhana.model.ResponseRegister;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiService {
@@ -26,4 +28,7 @@ public interface ApiService {
             @Field("edtusername") String userName,
             @Field("edtpassword") String password,
             @Field("vslevel") String level);
+
+    @GET("kategorimakanan.php")
+    Call<ResponseKategoriMakanan> getKategoriMakanan();
 }

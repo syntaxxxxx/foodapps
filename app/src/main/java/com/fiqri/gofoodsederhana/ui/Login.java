@@ -2,12 +2,12 @@ package com.fiqri.gofoodsederhana.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fiqri.gofoodsederhana.FoodUtama;
 import com.fiqri.gofoodsederhana.R;
@@ -26,9 +26,9 @@ import retrofit2.Response;
 public class Login extends SessionManager {
 
     @BindView(R.id.login_username)
-    TextInputEditText loginUsername;
+    TextInputEditText edtLoginUsername;
     @BindView(R.id.login_password)
-    TextInputEditText loginPassword;
+    TextInputEditText edtLoginPassword;
     @BindView(R.id.rg_user_admin_sign)
     RadioButton rgUserAdminSign;
     @BindView(R.id.rg_user_biasa_sign)
@@ -64,7 +64,7 @@ public class Login extends SessionManager {
                 levelUser = "User Biasa";
                 break;
             case R.id.sign_in:
-                validasiInputan();
+                login();
                 break;
             case R.id.register:
                 intent(Register.class);
@@ -72,47 +72,45 @@ public class Login extends SessionManager {
         }
     }
 
-    private void validasiInputan() {
+    private void login() {
 
-        // tampung dalam variable dan ambil inputan di field nya
-        userName = loginUsername.getText().toString().trim();
-        password = loginPassword.getText().toString().trim();
+        userName = edtLoginUsername.getText().toString().trim();
+        password = edtLoginPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(userName)) {
-            loginUsername.requestFocus();
-            loginUsername.setError("nama tidak boleh kosong");
+            edtLoginUsername.requestFocus();
+            edtLoginUsername.setError(getString(R.string.isEmpyField));
 
         } else if (TextUtils.isEmpty(password)) {
-            loginPassword.requestFocus();
-            loginPassword.setError("password tidak boleh kosong");
+            edtLoginPassword.requestFocus();
+            edtLoginPassword.setError(getString(R.string.isEmpyField));
 
         } else {
-            sendRequestLogin();
+            fetchLogin();
         }
     }
 
-    private void sendRequestLogin() {
-        ConfigRetrofit.getInstance().login(
+    private void fetchLogin() {
+        ConfigRetrofit.getInstancee().loginnn(
                 userName,
                 password,
-                levelUser
-        ).enqueue(new Callback<ResponseRegister>() {
+                levelUser).enqueue(new Callback<ResponseRegister>() {
             @Override
             public void onResponse(Call<ResponseRegister> call, Response<ResponseRegister> response) {
 
                 if (response.isSuccessful()) {
                     String result = response.body().getResult();
-                    String msg = response.body().getMsg();
+                    String message = response.body().getMsg();
                     String idUser = response.body().getUser().getIdUser();
 
-                    if (result.equals("1")){
-                        // simpen id login ke session
-                        // gak perlu login 2 kali
+                    if (result.equals("1")) {
                         sessionManager.createSession(userName);
                         sessionManager.setIdUser(idUser);
                         intent(FoodUtama.class);
-                        shortToast(msg);
                         finish();
+
+                    } else{
+                        shortToast(message);
                     }
                 }
             }

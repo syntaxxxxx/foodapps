@@ -3,7 +3,7 @@ package com.fiqri.gofoodsederhana.model;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class ResponseKategoriMakanan{
+public class ResponseKategori{
 
 	@SerializedName("DataKategori")
 	private List<DataKategoriItem> dataKategori;

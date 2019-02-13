@@ -1,10 +1,9 @@
 package com.fiqri.gofoodsederhana.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,15 +11,12 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fiqri.gofoodsederhana.R;
 import com.fiqri.gofoodsederhana.helper.MyFunction;
-import com.fiqri.gofoodsederhana.helper.SessionManager;
 import com.fiqri.gofoodsederhana.model.ResponseRegister;
-import com.fiqri.gofoodsederhana.model.User;
 import com.fiqri.gofoodsederhana.network.ConfigRetrofit;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,19 +28,19 @@ import retrofit2.Response;
 public class Register extends MyFunction {
 
     @BindView(R.id.regis_name)
-    TextInputEditText regisName;
+    TextInputEditText edtRegisName;
     @BindView(R.id.regis_alamat)
-    TextInputEditText regisAlamat;
+    TextInputEditText edtRegisAlamat;
     @BindView(R.id.regis_no_tlp)
-    TextInputEditText regisNoTlp;
+    TextInputEditText edtRegisNoTlp;
     @BindView(R.id.spin_kelamin)
     Spinner spinKelamin;
     @BindView(R.id.regis_username)
-    TextInputEditText regisUsername;
+    TextInputEditText edtRegisUsername;
     @BindView(R.id.regis_pass)
-    TextInputEditText regisPass;
+    TextInputEditText edtRegisPass;
     @BindView(R.id.regis_confir_pass)
-    TextInputEditText regisConfirPass;
+    TextInputEditText edtRegisConfirPass;
     @BindView(R.id.rg_user_admin)
     RadioButton rgUserAdmin;
     @BindView(R.id.rg_user_biasa)
@@ -64,7 +60,7 @@ public class Register extends MyFunction {
         ButterKnife.bind(this);
 
         setUpUser();
-        setUpJenKel();
+        setSpinnerJenkel();
     }
 
     private void setUpUser() {
@@ -72,19 +68,20 @@ public class Register extends MyFunction {
         else levelUser = "User Biasa";
     }
 
-    private void setUpJenKel() {
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, jenisKelamin);
+    private void setSpinnerJenkel() {
+        ArrayAdapter adapter = new ArrayAdapter(
+                this, android.R.layout.simple_spinner_item, jenisKelamin);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinKelamin.setAdapter(adapter);
         spinKelamin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                jenKel = jenisKelamin[position];
+            public void onItemSelected(AdapterView<?> parent, View view, int index, long id) {
+                jenKel = jenisKelamin[index];
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                /** nothing to do */
+                // something to do
             }
         });
     }
@@ -99,7 +96,7 @@ public class Register extends MyFunction {
                 levelUser = "User Biasa";
                 break;
             case R.id.sign_up:
-                validasiInputan();
+                register();
                 break;
             case R.id.login:
                 intent(Login.class);
@@ -107,72 +104,77 @@ public class Register extends MyFunction {
         }
     }
 
-    private void validasiInputan() {
+    private void register() {
 
-        // tampung dalam variable dan ambil inputan di field nya
-        name = regisName.getText().toString().trim();
-        alamat = regisAlamat.getText().toString().trim();
-        noHp = regisNoTlp.getText().toString().trim();
-        username = regisUsername.getText().toString().trim();
-        password = regisPass.getText().toString().trim();
-        conPassword = regisConfirPass.getText().toString().trim();
+        /**
+         * seleksi inputan user terlebih dahulu ada/tidak ada
+         * seleksi validasi password
+         * kita buat statment kondisi untuk cek nya (if & else)
+         * */
+
+        name = edtRegisName.getText().toString().trim();
+        alamat = edtRegisAlamat.getText().toString().trim();
+        noHp = edtRegisNoTlp.getText().toString().trim();
+        username = edtRegisUsername.getText().toString().trim();
+        password = edtRegisPass.getText().toString().trim();
+        conPassword = edtRegisConfirPass.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            regisName.requestFocus();
-            regisName.setError("nama tidak boleh kosong");
+            edtRegisName.requestFocus();
+            edtRegisName.setError(getString(R.string.isEmpyField));
 
         } else if (TextUtils.isEmpty(alamat)) {
-            regisAlamat.requestFocus();
-            regisAlamat.setError("alamat tidak boleh kosong");
+            edtRegisAlamat.requestFocus();
+            edtRegisAlamat.setError(getString(R.string.isEmpyField));
 
         } else if (TextUtils.isEmpty(noHp)) {
-            regisNoTlp.requestFocus();
-            regisNoTlp.setError("no hp tidak boleh kosong");
+            edtRegisNoTlp.requestFocus();
+            edtRegisNoTlp.setError(getString(R.string.isEmpyField));
 
         } else if (TextUtils.isEmpty(username)) {
-            regisUsername.requestFocus();
-            regisUsername.setError("username tidak boleh kosong");
+            edtRegisUsername.requestFocus();
+            edtRegisUsername.setError(getString(R.string.isEmpyField));
 
         } else if (TextUtils.isEmpty(password)) {
-            regisPass.requestFocus();
-            regisPass.setError("password tidak boleh kosong");
+            edtRegisPass.requestFocus();
+            edtRegisPass.setError(getString(R.string.isEmpyField));
 
         } else if (password.length() < 6) {
-            regisPass.setError("password minimal 6 karakter");
+            edtRegisPass.setError(getString(R.string.minimum));
 
         } else if (TextUtils.isEmpty(conPassword)) {
-            regisConfirPass.requestFocus();
-            regisConfirPass.setError("password confirm tidak boleh kosong");
+            edtRegisConfirPass.requestFocus();
+            edtRegisConfirPass.setError(getString(R.string.isEmpyField));
 
         } else if (!password.equals(conPassword)) {
-            regisConfirPass.requestFocus();
-            regisConfirPass.setError("password tidak sama");
+            edtRegisConfirPass.setError(getString(R.string.length));
 
         } else {
-            sendRequestRegister();
+            fetchRegister();
         }
     }
 
-    private void sendRequestRegister() {
-        ConfigRetrofit.getInstance().register(
+    private void fetchRegister() {
+        showProgressDialog("Fetch . . .");
+        ConfigRetrofit.getInstancee().registerrr(
                 name,
                 alamat,
                 jenKel,
                 noHp,
                 username,
                 levelUser,
-                password
-        ).enqueue(new Callback<ResponseRegister>() {
+                password).enqueue(new Callback<ResponseRegister>() {
             @Override
             public void onResponse(Call<ResponseRegister> call, Response<ResponseRegister> response) {
 
                 if (response.isSuccessful()) {
                     String result = response.body().getResult();
-                    String msg = response.body().getMsg();
+                    String message = response.body().getMsg();
 
-                    if (result.equals("1")){
+                    if (result.equals("1")) {
                         intent(Login.class);
-                        shortToast(msg);
+                        finish();
+                        Toast.makeText(c, message + " Silahkan Login", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -184,3 +186,23 @@ public class Register extends MyFunction {
         });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

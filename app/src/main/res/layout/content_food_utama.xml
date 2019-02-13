@@ -25,6 +25,7 @@
         tools:showIn="@layout/activity_food_utama">
 
         <android.support.v7.widget.RecyclerView
+            android:padding="16dp"
             android:id="@+id/list_food"
             android:layout_width="360dp"
             android:layout_height="wrap_content"
